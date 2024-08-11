@@ -25,7 +25,6 @@ export default function Login(){
             const response = await dispatch(loginUser({ email: emailForm, 
                                                        password: passwordForm }));
 
-            console.log("response >>> ", response)
             if (response.meta.requestStatus === 'fulfilled'){
                 navigate(ENDPOINTS.HOME)
             } else if (response.payload.error){

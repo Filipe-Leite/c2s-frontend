@@ -1,0 +1,86 @@
+#tasks-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+#tasks-page h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#container-list-tasks {
+    width: 100%;
+    max-width: 800px; /* Reduz a largura máxima do container da tabela */
+    margin: 0 auto;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #f8f9fa;
+    font-size: 12px; /* Reduz o tamanho da fonte */
+}
+
+table thead tr {
+    background-color: #343a40;
+    color: #fff;
+}
+
+table th, table td {
+    padding: 8px; /* Reduz o padding */
+    text-align: left;
+    border: 1px solid #dee2e6;
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+table td select {
+    width: 100%;
+    padding: 6px; /* Reduz o padding dos selects */
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 12px; /* Reduz o tamanho da fonte dos selects */
+    cursor: pointer;
+}
+
+table td[style*="background-color"] {
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+
+table td[style*="background-color: yellow"] {
+    background-color: #ffc107;
+}
+
+table td[style*="background-color: blue"] {
+    background-color: #007bff;
+}
+
+table td[style*="background-color: green"] {
+    background-color: #28a745;
+}
+
+table td[style*="background-color: white"] {
+    background-color: #fff;
+    color: #000;
+}
+
+table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+@media (max-width: 768px) {
+    table {
+        font-size: 12px; /* Reduz o tamanho da fonte em telas menores */
+    }
+
+    table th, table td {
+        padding: 6px; /* Reduz o padding em telas menores */
+    }
+}

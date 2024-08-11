@@ -6,8 +6,7 @@ export const authApi = axios.create({
 })
 
 export const tasksApi = axios.create({
-    baseURL: process.env.REACT_APP_TASKS_API_HOST,
-    withCredentials: true
+    baseURL: process.env.REACT_APP_TASKS_API_HOST
 })
 
 export const webScrapApi = axios.create({
@@ -49,6 +48,18 @@ export async function registerUserWithEmailAndPassword(email: string,
 
     return authApi
            .post(REQUEST_REQUIREMENTS.REGISTER_ENDPOINT, convertKeysToSnakeCase(data))
+                .then((response: any) => {
+                    return response;
+                })
+                .catch((error:any) => {
+                    return error.response;
+                });
+}
+
+export async function getExistingTasks(){
+
+  return tasksApi
+           .get(REQUEST_REQUIREMENTS.GET_ALL_TASKS_ENDPOINT)
                 .then((response: any) => {
                     return response;
                 })

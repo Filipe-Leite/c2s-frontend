@@ -73,6 +73,9 @@ const authSlice = createSlice({
     .addCase(loginUser.fulfilled, (state, action: any) => {
       state.loading = false;
       state.currentUserEmail = action.payload.user.email;
+
+
+      storeAuthHeader(action.payload.token)
     })
     .addCase(loginUser.rejected, (state, action: any) => {
       state.loading = false;
@@ -96,6 +99,10 @@ export const sessionAuthSliceActions = authSlice.actions;
 //     localStorage.removeItem('client');
 //     localStorage.removeItem('uid');
 // }
+
+function storeAuthHeader(token: string) {
+  localStorage.setItem('Authorization', `${token}`);
+}
 
 export function getLocalStorageAuthHeaders(){
   const authHeader = {

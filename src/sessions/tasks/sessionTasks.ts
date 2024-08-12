@@ -1,8 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState, AppThunk } from '../../store';
-import { useSelector } from 'react-redux';
-import * as REQUEST_REQUIREMENTS from '../../api/requestRequirements';
-import { getExistingTasks, loginUserWithEmailAndPassword, registerUserWithEmailAndPassword } from '../../api/sessionApi';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createTaskWithUrl, 
+         deleteTaskWithId, 
+         editTaskStatus, 
+         getAllTasksStatuses, 
+         getExistingTasks } from '../../api/sessionApi';
 
 
 export interface LoginBody {
@@ -15,26 +16,46 @@ export interface Task {
   url: string;
   createdAt: string;
   updatedAt: string;
+  taskStatusId: number;
   taskStatus: TaskStatus;
 }
 
-export interface TaskStatus{
+export interface TaskStatus {
+  id: number;
+  describe: string;
+}
+
+export interface TaskStatus {
   id: number;
   description: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface AuthState {
-  tasks: Task[];
-  loading: boolean;
+export interface CreateTaskBody {
+  url: string;
 }
 
-const initialState: AuthState = {
+export interface EditTaskStatusBody {
+  taskId: number;
+  taskStatusId: number;
+}
+
+export interface DeleteTask {
+  taskId: number;
+}
+
+export interface  TasksState {
+  tasks: Task[];
+  loading: boolean;
+  tasksStatuses: TaskStatus[];
+}
+
+const initialState: TasksState = {
   tasks: [],
+  tasksStatuses: [],
   loading: false
 };
-
 
 export const getTasks = createAsyncThunk(
   'sessionTasks/getTasks',
@@ -48,7 +69,59 @@ export const getTasks = createAsyncThunk(
     }
       return rejectWithValue(response.data);
   }
-);  
+);
+
+export const createTask = createAsyncThunk(
+  'sessionTasks/createTask',
+  async (payload: CreateTaskBody, { rejectWithValue }) => {
+
+    const response = await createTaskWithUrl(payload.url);
+
+    if (response.status >= 200 && response.status <= 300){
+      return response.data;
+    }
+      return rejectWithValue(response.data);
+  }
+);
+
+export const getTasksStatuses = createAsyncThunk(
+  'sessionTasks/getTasksStatuses',
+  async (_, { rejectWithValue }) => {
+
+    const response = await getAllTasksStatuses();
+
+    if (response.status >= 200 && response.status <= 300){
+      return response.data;
+    }
+      return rejectWithValue(response.data);
+  }
+);
+
+export const editTask = createAsyncThunk(
+  'sessionTasks/editTask',
+  async (payload: EditTaskStatusBody, { rejectWithValue }) => {
+
+    const response = await editTaskStatus(payload.taskId, payload.taskStatusId);
+
+    if (response.status >= 200 && response.status <= 300){
+      return response.data;
+    }
+      return rejectWithValue(response.data);
+  }
+);
+
+export const deleteTask = createAsyncThunk(
+  'sessionTasks/deleteTask',
+  async (payload: DeleteTask, { rejectWithValue }) => {
+
+    const response = await deleteTaskWithId(payload.taskId);
+
+    if (response.status >= 200 && response.status <= 300){
+      return response.data;
+    }
+      return rejectWithValue(response.data);
+  }
+);
 
 const tasksSlice = createSlice({
   name: 'sessionTasks',
@@ -57,15 +130,49 @@ const tasksSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
+    .addCase(getTasksStatuses.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(getTasksStatuses.fulfilled, (state, action: any) => {
+      state.loading = false;
+      state.tasksStatuses = convertKeysToCamelCase(action.payload);
+    })
+    .addCase(getTasksStatuses.rejected, (state, action: any) => {
+      state.loading = false;
+    })
     .addCase(getTasks.pending, (state) => {
       state.loading = true;
     })
     .addCase(getTasks.fulfilled, (state, action: any) => {
       state.loading = false;
-
       state.tasks = convertKeysToCamelCase(action.payload);
     })
-    .addCase(getTasks.rejected, (state, action: any) => {
+    .addCase(getTasks.rejected, (state) => {
+      state.loading = false;
+    })
+    .addCase(createTask.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(createTask.fulfilled, (state, action: any) => {
+      state.loading = false;
+
+      state.tasks = [...state.tasks, convertKeysToCamelCase(action.payload)];
+    })
+    .addCase(createTask.rejected, (state) => {
+      state.loading = false;
+    })
+
+    .addCase(deleteTask.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(deleteTask.fulfilled, (state, action: any) => {
+      state.loading = false;
+
+      state.tasks = state.tasks.filter(task => task.id != action.meta.arg.taskId);
+
+    })
+    .addCase(deleteTask.rejected, (state) => {
       state.loading = false;
     })
     }
@@ -87,26 +194,6 @@ export const sessionTasksSliceActions = tasksSlice.actions;
 //     localStorage.removeItem('client');
 //     localStorage.removeItem('uid');
 // }
-
-export function getLocalStorageAuthHeaders(){
-  const authHeader = {
-    accept: localStorage.getItem('accept') || '',
-    accessToken: localStorage.getItem('accessToken') || '',
-    client: localStorage.getItem('client') || '',
-    uid: localStorage.getItem('uid') || ''
-  }
-  return authHeader
-}
-
-export const localAuthHeader = () =>{
-  const authHeader = {
-    accept: localStorage.getItem('accept') || "",
-    accessToken: localStorage.getItem('accessToken') || "",
-    client: localStorage.getItem('client') || "",
-    uid: localStorage.getItem('uid') || ""
-  }
-  return authHeader
-}
 
 export function convertKeysToCamelCase(obj: any): any {
   if (typeof obj === 'object' && obj !== null) {

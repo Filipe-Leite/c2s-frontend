@@ -5,6 +5,7 @@ import * as ENDPOINTS from '../endpoints'
 import Register from '../microservices/c2s-authentication/pages/Register';
 import PrivateRoutes from './PrivateRoutes';
 import DashBoard from '../microservices/c2s-tasks/pages/DashBoard';
+import AppToolBar from '../microservices/c2s-notifications/AppToolBar';
 
 export default function RoutesApp() {
 
@@ -26,9 +27,11 @@ export default function RoutesApp() {
 
                 <Route path={ENDPOINTS.HOME} element={
                   <PrivateRoutes>
+                    <AppToolBar/>
                     <DashBoard/>
                   </PrivateRoutes>
                 } />
+                    
   
               </Routes>
             </BrowserRouter>

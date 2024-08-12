@@ -6,7 +6,10 @@ export const authApi = axios.create({
 })
 
 export const tasksApi = axios.create({
-    baseURL: process.env.REACT_APP_TASKS_API_HOST
+    baseURL: process.env.REACT_APP_TASKS_API_HOST,
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('Authorization')}`
+    }
 })
 
 export const webScrapApi = axios.create({
@@ -59,13 +62,77 @@ export async function registerUserWithEmailAndPassword(email: string,
 export async function getExistingTasks(){
 
   return tasksApi
-           .get(REQUEST_REQUIREMENTS.GET_ALL_TASKS_ENDPOINT)
+                .get(REQUEST_REQUIREMENTS.GET_ALL_TASKS_ENDPOINT, {
+                  headers: {
+                    Authorization: `${localStorage.getItem('Authorization')}`
+                  }
+                })
                 .then((response: any) => {
                     return response;
                 })
                 .catch((error:any) => {
                     return error.response;
                 });
+}
+
+export async function createTaskWithUrl(url: string){
+
+  return tasksApi
+         .post(REQUEST_REQUIREMENTS.CREATE_TASK_ENDPOINT,{url})
+              .then((response: any) => {
+                  return response;
+              })
+              .catch((error:any) => {
+                  return error.response;
+              });
+}
+
+export async function editTaskStatus(taskId: number, taskStatusId: number){
+
+  const bodyData = {
+    id: taskId,
+    taskStatusId: taskStatusId
+  }
+
+  return tasksApi
+         .patch(REQUEST_REQUIREMENTS.EDIT_TASK_ENDPOINT, 
+                convertKeysToSnakeCase(bodyData))
+              .then((response: any) => {
+                  return response;
+              })
+              .catch((error:any) => {
+                  return error.response;
+              });
+}
+
+export async function deleteTaskWithId(taskId: number){
+
+  const routeParams ={
+    taskId: taskId
+  }
+
+  const PRIVATE_ROUTES = REQUEST_REQUIREMENTS.handlePrivateRoutes({ROUTE_PARAMS: routeParams});
+
+  return tasksApi
+         .delete(PRIVATE_ROUTES.DELETE_TASK_ENDPOINT)
+              .then((response: any) => {
+                  return response;
+              })
+              .catch((error:any) => {
+                  return error.response;
+              });
+}
+
+export async function getAllTasksStatuses(){
+
+  return tasksApi
+         .get(REQUEST_REQUIREMENTS.GET_TASK_STATUSES_ENDPOINT)
+              .then((response: any) => {
+                  return response;
+              })
+              .catch((error:any) => {
+                  return error.response;
+              });
 }
 
 function convertKeysToSnakeCase(obj: any): any {
@@ -87,4 +154,4 @@ function convertKeysToSnakeCase(obj: any): any {
       }
     }
     return obj;
-  }
+}

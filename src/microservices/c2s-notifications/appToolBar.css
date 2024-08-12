@@ -1,0 +1,67 @@
+#tool-bar{
+    display: flex;
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    height: 8vw;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+    #image-app-name{
+        display: flex;
+        align-items: center;
+
+        img{
+            border-radius: 2vw;
+            height: 7vw;
+    
+    
+            @media (min-width: 700px){
+                height: 5vw;
+                border-radius: 10px;
+            }
+        }
+
+        h1{
+            margin-left: 10px;
+            height: fit-content;
+        }
+    }
+
+    #notifications-button{
+        display: flex;
+        height: 50px;
+        width: 50px;
+        background-color: #0071e9;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        cursor: pointer;
+
+        &:hover{
+            background-color: #004794;
+        }
+
+        img{
+            height: 30px;
+            width: 30px;
+            position: fixed;
+        }
+
+        #notifications-number{
+            display: flex;
+            position: relative;
+            z-index: 2;
+            top: -10px;
+            right: 12px;
+            border-radius: 50%;
+            background-color: rgb(216, 0, 0);
+            height: 20px;
+            width: 20px;    
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}

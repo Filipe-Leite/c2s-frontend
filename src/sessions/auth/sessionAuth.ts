@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../store';
 import { useSelector } from 'react-redux';
 import * as REQUEST_REQUIREMENTS from '../../api/requestRequirements';
-import { loginUserWithEmailAndPassword, registerUserWithEmailAndPassword } from '../../api/sessionApi';
+import { loginUserWithEmailAndPassword, logoutUserWithToken, registerUserWithEmailAndPassword, validateUserWithToken } from '../../api/sessionApi';
 
 
 export interface LoginBody {
@@ -18,12 +18,14 @@ export interface RegisterBody {
 
 export interface AuthState {
     currentUserEmail: string;
-    loading: boolean
+    loading: boolean;
+    loggedIn: boolean;
 }
 
 const initialState: AuthState = {
   currentUserEmail: '',
-  loading: false
+  loading: false,
+  loggedIn: false
 };
 
 export const loginUser = createAsyncThunk(
@@ -60,6 +62,32 @@ export const registerUser = createAsyncThunk(
   }
 );  
 
+export const validateUser = createAsyncThunk(
+  'sessionAuth/validateUser',
+  async (_, { rejectWithValue }) => {
+
+    const response = await validateUserWithToken();
+
+    if (response.status >= 200 && response.status <= 300){
+      return response.data;
+    }
+      return rejectWithValue(response.data);
+  }
+);
+
+export const logoutUser = createAsyncThunk(
+  'sessionAuth/logoutUser',
+  async (_, { rejectWithValue }) => {
+
+    const response = await logoutUserWithToken();
+
+    if (response.status >= 200 && response.status <= 300){
+      return response.data;
+    }
+      return rejectWithValue(response.data);
+  }
+);
+
 const authSlice = createSlice({
   name: 'sessionAuth',
   initialState,
@@ -69,15 +97,44 @@ const authSlice = createSlice({
     builder
     .addCase(loginUser.pending, (state) => {
       state.loading = true;
+      state.currentUserEmail = '';
     })
     .addCase(loginUser.fulfilled, (state, action: any) => {
       state.loading = false;
       state.currentUserEmail = action.payload.user.email;
-
+      state.loggedIn = true;
 
       storeAuthHeader(action.payload.token)
     })
-    .addCase(loginUser.rejected, (state, action: any) => {
+    .addCase(loginUser.rejected, (state) => {
+      state.loading = false;
+      state.loggedIn = false;
+      state.currentUserEmail = '';
+    })
+    .addCase(validateUser.pending, (state) => {
+      state.loading = true;
+      state.currentUserEmail = '';
+    })
+    .addCase(validateUser.fulfilled, (state, action: any) => {
+      state.loading = false;
+      state.currentUserEmail = action.payload.email;
+      state.loggedIn = true;
+    })
+    .addCase(validateUser.rejected, (state) => {
+      state.loading = false;
+      state.loggedIn = false;
+      state.currentUserEmail = '';
+    })
+
+    .addCase(logoutUser.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(logoutUser.fulfilled, (state) => {
+      state.loading = false;
+      state.currentUserEmail = '';
+      state.loggedIn = false;
+    })
+    .addCase(logoutUser.rejected, (state) => {
       state.loading = false;
     })
     }
@@ -102,16 +159,6 @@ export const sessionAuthSliceActions = authSlice.actions;
 
 function storeAuthHeader(token: string) {
   localStorage.setItem('Authorization', `${token}`);
-}
-
-export function getLocalStorageAuthHeaders(){
-  const authHeader = {
-    accept: localStorage.getItem('accept') || '',
-    accessToken: localStorage.getItem('accessToken') || '',
-    client: localStorage.getItem('client') || '',
-    uid: localStorage.getItem('uid') || ''
-  }
-  return authHeader
 }
 
 export const localAuthHeader = () =>{

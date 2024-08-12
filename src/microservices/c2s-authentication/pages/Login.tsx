@@ -1,9 +1,9 @@
 import './login.css'
 import c2sLogo from '../../../assets/c2s-logo.png'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../store';
-import { loginUser } from '../../../sessions/auth/sessionAuth';
+import { loginUser, validateUser } from '../../../sessions/auth/sessionAuth';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import * as ENDPOINTS from '../../../endpoints';
@@ -15,7 +15,19 @@ export default function Login(){
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
 
-    async function handleSubmitLogin(emailForm: string, passwordForm: string) {
+    useEffect(()=>{
+        async function fetchLogin(){
+            const response = await dispatch(validateUser())
+
+            if (response.meta.requestStatus == 'fulfilled'){
+                navigate(ENDPOINTS.HOME)
+            }
+        }
+
+        fetchLogin();
+    },[])
+
+    async function handleSubmitLogin(emailForm: string, passwordForm: string){
         
         if (emailForm === '' || passwordForm === '') {
             return toast.error("Please fill out all fields")
@@ -23,7 +35,7 @@ export default function Login(){
         else {
 
             const response = await dispatch(loginUser({ email: emailForm, 
-                                                       password: passwordForm }));
+                                                        password: passwordForm }));
 
             if (response.meta.requestStatus === 'fulfilled'){
                 navigate(ENDPOINTS.HOME)

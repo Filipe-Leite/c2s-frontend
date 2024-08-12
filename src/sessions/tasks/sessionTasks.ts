@@ -143,6 +143,7 @@ const tasksSlice = createSlice({
     })
     .addCase(getTasks.pending, (state) => {
       state.loading = true;
+      state.tasks = [];
     })
     .addCase(getTasks.fulfilled, (state, action: any) => {
       state.loading = false;
@@ -150,6 +151,7 @@ const tasksSlice = createSlice({
     })
     .addCase(getTasks.rejected, (state) => {
       state.loading = false;
+      state.tasks = [];
     })
     .addCase(createTask.pending, (state) => {
       state.loading = true;
@@ -163,13 +165,30 @@ const tasksSlice = createSlice({
       state.loading = false;
     })
 
+    .addCase(editTask.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(editTask.fulfilled, (state, action: any) => {
+      state.loading = false;
+      const payloadConvertedCamelCase = convertKeysToCamelCase(action.payload)
+
+      const taskToEditIndex = state.tasks
+                                   .findIndex((object: Task) => 
+                                               object.id === action.payload.id);
+
+      state.tasks[taskToEditIndex].taskStatusId = payloadConvertedCamelCase.taskStatusId;
+    })
+    .addCase(editTask.rejected, (state) => {
+      state.loading = false;
+    })
+
     .addCase(deleteTask.pending, (state) => {
       state.loading = true;
     })
     .addCase(deleteTask.fulfilled, (state, action: any) => {
       state.loading = false;
 
-      state.tasks = state.tasks.filter(task => task.id != action.meta.arg.taskId);
+      state.tasks = state.tasks.filter(task => task.id !== action.meta.arg.taskId);
 
     })
     .addCase(deleteTask.rejected, (state) => {

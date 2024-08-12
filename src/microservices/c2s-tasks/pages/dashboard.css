@@ -47,6 +47,7 @@ table th, table td {
       border: none;
       background-color: rgb(1, 175, 15);
       border-radius: 2px;
+      padding: 4px;
       color: white;
 
       &:hover{
@@ -72,6 +73,7 @@ table th, table td {
       background-color: rgb(255, 0, 0);
       border-radius: 4px;
       color: white;
+      padding: 4px;
 
       &:hover{
           background-color: rgb(192, 0, 0);

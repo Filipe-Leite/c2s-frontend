@@ -17,17 +17,26 @@ export default function DashBoard() {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(getTasksStatuses());
-    dispatch(getTasks());
-  }, [dispatch]);
 
-  useEffect(() => {
     const initialStatuses: { [key: number]: number } = {};
     tasks.forEach((task: Task) => {
       initialStatuses[task.id] = task.taskStatusId;
     });
     setTaskStatuses(initialStatuses);
-  }, [tasks]);
+  
+
+  },[tasks]);
+
+  useEffect(() => {
+
+    async function fetchData(){
+      await dispatch(getTasksStatuses());
+      await dispatch(getTasks());
+    }
+
+    fetchData();
+
+  }, []);
 
   function handleFormatDate(date: any){
     const originalDate = new Date(date);
@@ -84,11 +93,7 @@ export default function DashBoard() {
 
   async function handleDeleteTask(taskId: number) {
 
-    console.log("handleDeleteTask taskId >>>", taskId)
-
     const response = await dispatch(deleteTask({taskId: taskId}));
-
-    console.log("response >>>> ", response)
 
     if (response.meta.requestStatus !== 'fulfilled') {
       toast.error('Something went wrong');

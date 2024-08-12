@@ -6,10 +6,7 @@ export const authApi = axios.create({
 })
 
 export const tasksApi = axios.create({
-    baseURL: process.env.REACT_APP_TASKS_API_HOST,
-    headers: {
-      'Authorization': `Bearer ${localStorage.getItem('Authorization')}`
-    }
+    baseURL: process.env.REACT_APP_TASKS_API_HOST
 })
 
 export const webScrapApi = axios.create({
@@ -26,7 +23,6 @@ export async function loginUserWithEmailAndPassword(email: string,
         password: password
     };
     
-
     return authApi
         .post(REQUEST_REQUIREMENTS.LOGIN_ENDPOINT, data)
             .then((response: any) => {
@@ -59,14 +55,43 @@ export async function registerUserWithEmailAndPassword(email: string,
                 });
 }
 
+export async function validateUserWithToken() {
+
+    return authApi
+          .get(REQUEST_REQUIREMENTS.VALIDATE_TOKEN_ENDPOINT,{
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('Authorization')}`
+            }})
+            .then((response: any) => {
+              return response;
+            })
+            .catch((error:any) => {
+              return error.response;
+            });
+}
+
+export async function logoutUserWithToken() {
+
+  return authApi
+        .delete(REQUEST_REQUIREMENTS.LOGOUT_ENDPOINT,{
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('Authorization')}`
+          }})
+          .then((response: any) => {
+            return response;
+          })
+          .catch((error:any) => {
+            return error.response;
+          });
+}
+
 export async function getExistingTasks(){
 
   return tasksApi
-                .get(REQUEST_REQUIREMENTS.GET_ALL_TASKS_ENDPOINT, {
+                .get(REQUEST_REQUIREMENTS.GET_ALL_TASKS_ENDPOINT,{
                   headers: {
-                    Authorization: `${localStorage.getItem('Authorization')}`
-                  }
-                })
+                    'Authorization': `Bearer ${localStorage.getItem('Authorization')}`
+                  }})
                 .then((response: any) => {
                     return response;
                 })
@@ -78,7 +103,10 @@ export async function getExistingTasks(){
 export async function createTaskWithUrl(url: string){
 
   return tasksApi
-         .post(REQUEST_REQUIREMENTS.CREATE_TASK_ENDPOINT,{url})
+         .post(REQUEST_REQUIREMENTS.CREATE_TASK_ENDPOINT,{url},{
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('Authorization')}`
+              }})
               .then((response: any) => {
                   return response;
               })
@@ -95,8 +123,11 @@ export async function editTaskStatus(taskId: number, taskStatusId: number){
   }
 
   return tasksApi
-         .patch(REQUEST_REQUIREMENTS.EDIT_TASK_ENDPOINT, 
-                convertKeysToSnakeCase(bodyData))
+         .patch(REQUEST_REQUIREMENTS.EDIT_TASK_ENDPOINT,
+                convertKeysToSnakeCase(bodyData),{
+                headers: {
+                  'Authorization': `Bearer ${localStorage.getItem('Authorization')}`
+                }})
               .then((response: any) => {
                   return response;
               })
@@ -114,7 +145,10 @@ export async function deleteTaskWithId(taskId: number){
   const PRIVATE_ROUTES = REQUEST_REQUIREMENTS.handlePrivateRoutes({ROUTE_PARAMS: routeParams});
 
   return tasksApi
-         .delete(PRIVATE_ROUTES.DELETE_TASK_ENDPOINT)
+         .delete(PRIVATE_ROUTES.DELETE_TASK_ENDPOINT,{
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('Authorization')}`
+              }})
               .then((response: any) => {
                   return response;
               })
@@ -126,7 +160,10 @@ export async function deleteTaskWithId(taskId: number){
 export async function getAllTasksStatuses(){
 
   return tasksApi
-         .get(REQUEST_REQUIREMENTS.GET_TASK_STATUSES_ENDPOINT)
+         .get(REQUEST_REQUIREMENTS.GET_TASK_STATUSES_ENDPOINT,{
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('Authorization')}`
+              }})
               .then((response: any) => {
                   return response;
               })

@@ -7,7 +7,7 @@
     justify-content: center;
 
     #login-container{
-        height: 30vw;
+        height: fit-content;
         width: 30vw;
         background-color: rgb(71, 74, 240);
         border-radius: 20px;
@@ -126,7 +126,7 @@
                 background-color: rgb(51, 53, 170);
                 border-radius: 5px;
                 cursor: pointer;
-                padding: 5px;
+                padding: 5px 10px 5px 10px;
                 font-size: 12px;
 
                 &:hover{

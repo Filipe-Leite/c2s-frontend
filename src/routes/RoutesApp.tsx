@@ -25,6 +25,13 @@ export default function RoutesApp() {
                   </PublicRoutes>
                 } />
 
+                <Route path={'/'} element={
+                  <PrivateRoutes>
+                    <AppToolBar/>
+                    <DashBoard/>
+                  </PrivateRoutes>
+                } />
+
                 <Route path={ENDPOINTS.HOME} element={
                   <PrivateRoutes>
                     <AppToolBar/>

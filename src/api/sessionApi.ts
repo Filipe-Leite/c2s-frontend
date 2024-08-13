@@ -9,6 +9,10 @@ export const tasksApi = axios.create({
     baseURL: process.env.REACT_APP_TASKS_API_HOST
 })
 
+export const notificationsApi = axios.create({
+  baseURL: process.env.REACT_APP_NOTIFICATIONS_API_HOST
+})
+
 export const webScrapApi = axios.create({
     baseURL: process.env.REACT_APP_WEB_SCRAP_API_HOST,
     withCredentials: true

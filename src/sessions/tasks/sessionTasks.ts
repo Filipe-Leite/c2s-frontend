@@ -3,7 +3,8 @@ import { createTaskWithUrl,
          deleteTaskWithId, 
          editTaskStatus, 
          getAllTasksStatuses, 
-         getExistingTasks } from '../../api/sessionApi';
+         getExistingTasks, 
+         makeWebScrapingWithUrl} from '../../api/sessionApi';
 
 
 export interface LoginBody {
@@ -43,6 +44,11 @@ export interface EditTaskStatusBody {
 
 export interface DeleteTask {
   taskId: number;
+}
+
+export interface WebScrapingBody{
+  taskId: number;
+  url: string;
 }
 
 export interface  TasksState {
@@ -115,6 +121,20 @@ export const deleteTask = createAsyncThunk(
   async (payload: DeleteTask, { rejectWithValue }) => {
 
     const response = await deleteTaskWithId(payload.taskId);
+
+    if (response.status >= 200 && response.status <= 300){
+      return response.data;
+    }
+      return rejectWithValue(response.data);
+  }
+);
+
+
+export const makeWebScraping = createAsyncThunk(
+  'sessionTasks/makeWebScraping',
+  async (payload: WebScrapingBody, { rejectWithValue }) => {
+
+    const response = await makeWebScrapingWithUrl(payload);
 
     if (response.status >= 200 && response.status <= 300){
       return response.data;

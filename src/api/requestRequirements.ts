@@ -5,6 +5,7 @@ export const CREATE_TASK_ENDPOINT = '/create_task'
 export const EDIT_TASK_ENDPOINT = '/edit_task'
 export const VALIDATE_TOKEN_ENDPOINT = '/validate_token'
 export const LOGOUT_ENDPOINT = '/logout'
+export const MAKE_WEB_SCRAPING1_ENDPOINT = '/web_scraper'
 
 export const GET_TASK_STATUSES_ENDPOINT = '/tasks_status'
 

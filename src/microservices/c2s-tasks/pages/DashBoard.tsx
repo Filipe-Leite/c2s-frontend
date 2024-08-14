@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "../../../store";
 import { useDispatch, useSelector } from "react-redux";
-import { createTask, deleteTask, editTask, getTasks, getTasksStatuses, Task, TaskStatus } from "../../../sessions/tasks/sessionTasks";
+import { createTask, deleteTask, editTask, getTasks, getTasksStatuses, makeWebScraping, Task, TaskStatus } from "../../../sessions/tasks/sessionTasks";
 import CreateModal from '../components/CreateModal';
 import './dashboard.css';
 import AddIcon from '../../../assets/add-icon.png';
 import { toast } from 'react-toastify';
 import { format } from "date-fns";
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:5000', {
+  transports: ['websocket']
+});
 
 export default function DashBoard() {
   const loading = useSelector((state: RootState) => state.sessionTasks.loading);
@@ -100,6 +105,21 @@ export default function DashBoard() {
     }
   }
 
+  async function handleWebScraping(taskId: number,url: string) {
+
+    const response = await dispatch(makeWebScraping({taskId: taskId,
+                                                     url: url }));
+
+    console.log("handleWebScraping response >>> ", response)
+
+    if (response.meta.requestStatus === 'fulfilled') {
+      toast.error('success');
+    }
+    else {
+      toast.error('error');
+    }
+  }
+
   return (
     <div id="tasks-page">
       <div id="container-title-task-button-add">
@@ -138,7 +158,8 @@ export default function DashBoard() {
                   </select>
                 </td>
                 <td>
-                  <button id='extract-data-button'>
+                  <button id='extract-data-button'
+                          onClick={() => {handleWebScraping(task.id, task.url)}}>
                     Extract Data
                   </button>
                 </td>

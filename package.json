@@ -28,7 +28,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "PORT=8000 react-scripts start",
+    "start": "concurrently \"node services/socket_server.js\" \"PORT=8000 react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -55,6 +55,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/date-fns": "^2.6.0",
     "@types/express": "^4.17.21",
-    "@types/socket.io": "^3.0.2"
+    "@types/socket.io": "^3.0.2",
+    "concurrently": "^8.2.2"
   }
 }

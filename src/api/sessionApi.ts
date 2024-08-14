@@ -1,16 +1,20 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import * as REQUEST_REQUIREMENTS from './requestRequirements';
+import { WebScrapingBody } from '../sessions/tasks/sessionTasks';
 
 export const authApi = axios.create({
-    baseURL: process.env.REACT_APP_AUTH_API_HOST
+    baseURL: process.env.REACT_APP_AUTH_API_HOST,
+    withCredentials: true
 })
 
 export const tasksApi = axios.create({
-    baseURL: process.env.REACT_APP_TASKS_API_HOST
+    baseURL: process.env.REACT_APP_TASKS_API_HOST,
+    withCredentials: true
 })
 
 export const notificationsApi = axios.create({
-  baseURL: process.env.REACT_APP_NOTIFICATIONS_API_HOST
+  baseURL: process.env.REACT_APP_NOTIFICATIONS_API_HOST,
+  withCredentials: true
 })
 
 export const webScrapApi = axios.create({
@@ -28,7 +32,10 @@ export async function loginUserWithEmailAndPassword(email: string,
     };
     
     return authApi
-        .post(REQUEST_REQUIREMENTS.LOGIN_ENDPOINT, data)
+        .post(REQUEST_REQUIREMENTS.LOGIN_ENDPOINT,data,{
+            headers: {
+              withCredentials: true
+            }})
             .then((response: any) => {
                 return response;
             })
@@ -64,7 +71,8 @@ export async function validateUserWithToken() {
     return authApi
           .get(REQUEST_REQUIREMENTS.VALIDATE_TOKEN_ENDPOINT,{
             headers: {
-              'Authorization': `Bearer ${localStorage.getItem('Authorization')}`
+              'Authorization': `Bearer ${localStorage.getItem('Authorization')}`,
+              withCredentials: true
             }})
             .then((response: any) => {
               return response;
@@ -129,9 +137,10 @@ export async function editTaskStatus(taskId: number, taskStatusId: number){
   return tasksApi
          .patch(REQUEST_REQUIREMENTS.EDIT_TASK_ENDPOINT,
                 convertKeysToSnakeCase(bodyData),{
-                headers: {
-                  'Authorization': `Bearer ${localStorage.getItem('Authorization')}`
-                }})
+                  headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('Authorization')}`,
+                    withCredentials: true
+                  }})
               .then((response: any) => {
                   return response;
               })
@@ -167,6 +176,23 @@ export async function getAllTasksStatuses(){
          .get(REQUEST_REQUIREMENTS.GET_TASK_STATUSES_ENDPOINT,{
               headers: {
                 'Authorization': `Bearer ${localStorage.getItem('Authorization')}`
+              }})
+              .then((response: any) => {
+                  return response;
+              })
+              .catch((error:any) => {
+                  return error.response;
+              });
+}
+
+export async function makeWebScrapingWithUrl(requestBody: WebScrapingBody){
+
+  return webScrapApi
+         .post(REQUEST_REQUIREMENTS.MAKE_WEB_SCRAPING1_ENDPOINT, 
+               convertKeysToSnakeCase(requestBody),{
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('Authorization')}`,
+                withCredentials: true
               }})
               .then((response: any) => {
                   return response;

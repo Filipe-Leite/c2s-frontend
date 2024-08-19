@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './createModal.css';
 
 interface ModalProps {
@@ -9,6 +9,12 @@ interface ModalProps {
 
 const CreateModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    
+    setUrl('');
+
+  },[isOpen]);
 
   const handleSubmit = () => {
     onSubmit(url);

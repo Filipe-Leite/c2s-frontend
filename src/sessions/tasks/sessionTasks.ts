@@ -150,7 +150,6 @@ const tasksSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-
     .addCase(getTasksStatuses.pending, (state) => {
       state.loading = true;
     })

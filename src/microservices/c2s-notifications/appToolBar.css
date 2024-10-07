@@ -1,4 +1,4 @@
-#tool-bar{
+#tool-bar {
     display: flex;
     width: 100%;
     background-color: #007bff;
@@ -8,96 +8,97 @@
     align-items: center;
     justify-content: space-between;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
 
-    #image-app-name{
-        display: flex;
-        align-items: center;
+#image-app-name {
+    display: flex;
+    align-items: center;
+}
 
-        img{
-            border-radius: 2vw;
-            height: 7vw;
-    
-    
-            @media (min-width: 700px){
-                height: 5vw;
-                border-radius: 10px;
-            }
-        }
+#image-app-name img {
+    border-radius: 2vw;
+    height: 7vw;
+}
 
-        h1{
-            margin-left: 10px;
-            height: fit-content;
-        }
+@media (min-width: 700px) {
+    #image-app-name img {
+        height: 5vw;
+        border-radius: 10px;
     }
+}
 
-    #container-email-notifications{
-        display: flex;
-        align-items: center;
-        
-        h2{
-            font-size: 14px;
-            margin-right: 10px;
-        }
+#image-app-name h1 {
+    margin-left: 10px;
+    height: fit-content;
+}
 
-        #notifications-button {
-            display: flex;
-            height: 50px;
-            width: 50px;
-            background-color: #0071e9;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-            cursor: pointer;
-            position: relative;
-            margin-right: 20px;
-        
-            &:hover {
-                background-color: #004794;
-            }
-        
-            img {
-                height: 30px;
-                width: 30px;
-                position: absolute; /* Define a posição absoluta para o ícone */
-                z-index: 1; /* Define a prioridade de sobreposição */
-            }
-        
-            #notifications-number {
-                display: flex;
-                position: absolute; /* Define a posição absoluta para o contador de notificações */
-                z-index: 2; /* Define uma prioridade de sobreposição maior para estar acima do ícone */
-                top: -5px;
-                right: -5px;
-                border-radius: 50%;
-                background-color: rgb(216, 0, 0);
-                height: 20px;
-                width: 20px;    
-                justify-content: center;
-                align-items: center;
-                color: white;
-                font-size: 12px;
-            }
-        }
+#container-email-notifications {
+    display: flex;
+    align-items: center;
+}
 
-        #containerlogout-button{
-            display: flex;
-            height: 40px;
-            width: 50px;
-            background-color: #0071e9;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            position: relative;
-            margin-right: 20px;
-            border: 2px solid white;
-            border-radius: 5px;
-            color: white;
-        
-            &:hover {
-                background-color: #004794;
-            }
-        }
-    }
+#container-email-notifications h2 {
+    font-size: 14px;
+    margin-right: 10px;
+}
 
-    
+#notifications-button {
+    display: flex;
+    height: 50px;
+    width: 50px;
+    background-color: #0071e9;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    margin-right: 20px;
+}
+
+#notifications-button:hover {
+    background-color: #004794;
+}
+
+#notifications-button img {
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    z-index: 1;
+}
+
+#notifications-number {
+    display: flex;
+    position: absolute;
+    z-index: 2;
+    top: -5px;
+    right: -5px;
+    border-radius: 50%;
+    background-color: rgb(216, 0, 0);
+    height: 20px;
+    width: 20px;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 12px;
+}
+
+#containerlogout-button {
+    display: flex;
+    height: fit-content;
+    width: fit-content;
+    background-color: #0071e9;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    margin-right: 20px;
+    border: 2px solid white;
+    border-radius: 5px;
+    color: white;
+    font-size: 1vw;
+    padding: 5px;
+}
+
+#containerlogout-button:hover {
+    background-color: #004794;
 }

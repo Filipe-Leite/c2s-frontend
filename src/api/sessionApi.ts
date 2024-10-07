@@ -97,6 +97,21 @@ export async function logoutUserWithToken() {
           });
 }
 
+export async function getAllNotifications(){
+
+  return notificationsApi
+  .get(REQUEST_REQUIREMENTS.GET_ALL_NOTIFICATIONS_ENDPOINT,{
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('Authorization')}`
+    }})
+  .then((response: any) => {
+      return response;
+  })
+  .catch((error:any) => {
+      return error.response;
+  });
+}
+
 export async function getExistingTasks(){
 
   return tasksApi

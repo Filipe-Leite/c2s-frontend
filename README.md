@@ -44,7 +44,7 @@ Websocket
 
 ## 2 - After clone the microservices go to each cloned repository (make sure you are using the correct Ruby language and Ruby On Rails versions) and run:
 
-rails db:create db:migrate db:seed
+rails db:create db:migrate db:seed <br>
 Rails server #on each terminal session for each repository above
 
 ## 3 - Clone the front-end repository
@@ -57,7 +57,7 @@ Rails server #on each terminal session for each repository above
 
 ### 4.1 - Go to c2s-frontend directory and run to run the front-end system:
 
-npm install
+npm install <br>
 npm start
 
 ### 4.2 - Make sure your machine has redis installed and run to run the redis server:
@@ -67,7 +67,7 @@ redis-server
 ### 4.3 - Go to c2s-frontend/server directory and run:
 #### This step is for run the websocket for listen to redis modifications in task_updates channel
 
-npm install
+npm install <br>
 npm run dev
 
 ## 5 - Success!!! Now you can create two or more accounts and login at same time
